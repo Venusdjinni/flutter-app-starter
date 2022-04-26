@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_app_starter/requests/requests_errors.dart';
+import 'package:flutter_app_starter/requests/users_requests.dart';
 
 typedef ComputeRequest = Future<dynamic> Function(Future<Response> request, [String? dataMapping]);
 
@@ -17,9 +18,10 @@ class Requests {
 
   //static String get deviceName => "${_deviceInfo.utsname.machine}: ${_deviceInfo.systemName} ${_deviceInfo.systemVersion}";
 
-  static Requests? get instance => _instance;
+  static Requests get instance => _instance;
 
   late Dio _dio;
+  late UserRequests _userRequests;
 
   Requests._(String serverAddress) {
     BaseOptions options = BaseOptions(
@@ -27,16 +29,17 @@ class Requests {
       connectTimeout: 300 * 1000,
       sendTimeout: 300 * 1000,
       receiveTimeout: 300 * 1000,
-      headers: {
-        "conn-type": "mobile",
-        //"device": deviceName
-      },
+      headers: {},
       validateStatus: (status) {
         return status! < 500;
       },
     );
     _dio = Dio(options);
+
+    _userRequests = UserRequests(_dio, _computeRequest);
   }
+
+  UserRequests get userRequests => _userRequests;
 
   Future<dynamic> _computeRequest(Future<Response> request, [String? dataMapping]) async {
     Response response;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_starter/requests/datamanager.dart';
+import 'package:flutter_app_starter/requests/requests.dart';
 import 'package:flutter_app_starter/widgets/item_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
       });
     }
+  }
+
+  void getUser() {
+    Requests.instance.userRequests.computeRequest;
+    Requests.instance.userRequests.getUsers(id: 'DataManager.user.id').then((user) {
+      // get value here
+    }).catchError((e) {
+      // catch error
+    });
   }
 
   @override
